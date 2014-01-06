@@ -1,0 +1,24 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="SNAKE"
+        android:id="@+id/textView"
+        android:layout_gravity="center" />
+
+    <com.example.myapplication.SnakeView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="com.example.myapplication.SnakeView"
+        android:id="@+id/view"
+        android:layout_gravity="left|top" />
+
+</FrameLayout>
