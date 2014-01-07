@@ -34,18 +34,19 @@ public class SnakeActivity extends Activity {
     }
 
     public void playSnake() {
-        new Runnable() {
+        Runnable run = new Runnable() {
             public void run() {
                 step();
-                SnakeActivity.customHandler.postDelayed(this, 100);
+                SnakeActivity.customHandler.postDelayed(this, 1000);
             }
-        }.run();
+        };
+        SnakeActivity.customHandler.postDelayed(run, 1000);
     }
 
     public void step() {
+        this.snake.step();
         SnakeView sv = (SnakeView)findViewById(R.id.view);
         sv.setSnake(this.getSnake());
-        this.snake.step();
         sv.invalidate();
     }
 
@@ -71,7 +72,8 @@ public class SnakeActivity extends Activity {
     }
 
     public boolean setLeadDirection(int direction) {
-        return this.snake.setLeadDirection(direction);
+        this.snake.setDirection(direction);
+        return true;
     }
 
     @Override

@@ -12,39 +12,33 @@ import java.util.List;
  */
 public class Snake {
 
-    public ArrayList<List<Integer>> positions = new ArrayList<List<Integer>>();
+    public ArrayList<Pair<Integer, Integer>> positions = new ArrayList<Pair<Integer, Integer>>();
+    public int direction = 0;
     public Pair<Integer, Integer> foodPosition = new Pair<Integer, Integer>(randomCoordinate(), randomCoordinate());
     public int GRID_SIZE = 10;
 
     public Snake() {
         if (numSquares() == 0) {
-            addSquare(0, 0, 0);
+            addSquare(randomCoordinate(), randomCoordinate());
         }
     }
 
-    public void addSquare(int x, int y, int direction) {
-        ArrayList<Integer> newSquare = new ArrayList<Integer>();
-        newSquare.add(randomCoordinate());
-        newSquare.add(randomCoordinate());
-        newSquare.add(0);
-        this.positions.add(newSquare);
+    // Adds a square to the beginning of the Snake
+    public void addSquare(int x, int y) {
+        this.positions.add(0, new Pair<Integer, Integer>(x, y));
     }
 
-    public ArrayList<List<Integer>> getPositions() {
+    // Removes the last square from the Snake
+    public void removeSquare() {
+        this.positions.remove(this.positions.size() - 1);
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getPositions() {
         return this.positions;
-    }
-
-    public boolean step() {
-        for (int i=0; i<this.numSquares(); i++) {
-            stepSingle(i);
-        }
-        if (ate()) { handleEaten(); }
-        return true;
     }
 
     public void handleEaten() {
         foodPosition = new Pair<Integer, Integer>(randomCoordinate(), randomCoordinate());
-        addSquare(getX(numSquares()-1)-1, getY(numSquares()-1), getDirection(numSquares()-1));
     }
 
     public int randomCoordinate() {
@@ -59,53 +53,40 @@ public class Snake {
         return this.positions.size();
     }
 
-    public boolean stepSingle(int index) {
-        Log.e(String.valueOf(getDirection(index)),"d");
-        switch ((int)getDirection(index)) {
+    public boolean step() {
+        switch (getDirection()) {
             case 0:
-                this.setPosition(index, getX(index)+1, getY(index)-1);
+                this.addSquare(getX(0)+1, getY(0));
             case 1:
-                this.setPosition(index, getX(index)+1, getY(index)+1);
+                this.addSquare(getX(0), getY(0)+1);
             case 2:
-                this.setPosition(index, getX(index)-1, getY(index)+1);
+                this.addSquare(getX(0)-1, getY(0));
             case 3:
-                this.setPosition(index, getX(index), getY(index)-1);
+                this.addSquare(getX(0), getY(0)-1);
+            default:
+                this.addSquare(getX(0)+1, getY(0));
+        }
+        if (ate()) {
+            return true;
+        } else {
+            removeSquare();
         }
         return true;
     }
 
-    public void setPosition(int index, int x, int y) {
-        setX(index, x);
-        setY(index, y);
-    }
-
     public int getX(int index) {
-        return this.getPositions().get(index).get(0);
+        return this.getPositions().get(index).first;
     }
 
     public int getY(int index) {
-        return this.getPositions().get(index).get(1);
+        return this.getPositions().get(index).second;
     }
 
-    public int getDirection(int index) {
-        return this.getPositions().get(index).get(2);
+    public int getDirection() {
+        return this.direction;
     }
 
-    public void setDirection(int index, int direction) {
-        this.getPositions().get(index).set(2, direction);
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
-
-    public void setX(int index, int x) {
-        this.getPositions().get(index).set(0, x);
-    }
-
-    public void setY(int index, int y) {
-        this.getPositions().get(index).set(1, y);
-    }
-
-    public boolean setLeadDirection(int direction) {
-        this.setDirection(0, direction);
-        return true;
-    }
-
 }
