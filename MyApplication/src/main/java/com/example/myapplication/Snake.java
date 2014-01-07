@@ -15,12 +15,10 @@ public class Snake {
     public ArrayList<Pair<Integer, Integer>> positions = new ArrayList<Pair<Integer, Integer>>();
     public int direction = 0;
     public Pair<Integer, Integer> foodPosition = new Pair<Integer, Integer>(randomCoordinate(), randomCoordinate());
-    public int GRID_SIZE = 10;
+    public int GRID_SIZE = 20;
 
     public Snake() {
-        if (numSquares() == 0) {
-            addSquare(randomCoordinate(), randomCoordinate());
-        }
+        if (numSquares() == 0) addSquare((int) (GRID_SIZE / 2), (int) (GRID_SIZE / 2));
     }
 
     // Adds a square to the beginning of the Snake
@@ -35,10 +33,6 @@ public class Snake {
 
     public ArrayList<Pair<Integer, Integer>> getPositions() {
         return this.positions;
-    }
-
-    public void handleEaten() {
-        foodPosition = new Pair<Integer, Integer>(randomCoordinate(), randomCoordinate());
     }
 
     public int randomCoordinate() {
@@ -57,21 +51,41 @@ public class Snake {
         switch (getDirection()) {
             case 0:
                 this.addSquare(getX(0)+1, getY(0));
+                break;
             case 1:
                 this.addSquare(getX(0), getY(0)+1);
+                break;
             case 2:
                 this.addSquare(getX(0)-1, getY(0));
+                break;
             case 3:
                 this.addSquare(getX(0), getY(0)-1);
+                break;
             default:
                 this.addSquare(getX(0)+1, getY(0));
         }
-        if (ate()) {
-            return true;
+        if (collided() || leftGrid()) {
+            return false;
+        }
+        else if (ate()) {
+            foodPosition = new Pair<Integer, Integer>(randomCoordinate(), randomCoordinate());
         } else {
             removeSquare();
         }
         return true;
+    }
+
+    public boolean leftGrid() {
+        return (getX(0) < 0) || (getX(0) > GRID_SIZE) || (getY(0) < 0) || (getY(0) > GRID_SIZE);
+    }
+
+    public boolean collided() {
+        for (int i=1; i<this.positions.size(); i++) {
+            if ((getX(i) == getX(0) ) && (getY(0) == getY(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getX(int index) {

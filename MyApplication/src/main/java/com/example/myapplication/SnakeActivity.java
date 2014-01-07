@@ -34,20 +34,21 @@ public class SnakeActivity extends Activity {
     }
 
     public void playSnake() {
-        Runnable run = new Runnable() {
+       Runnable runner = new Runnable() {
             public void run() {
-                step();
-                SnakeActivity.customHandler.postDelayed(this, 1000);
+                if (step()) {
+                    SnakeActivity.customHandler.postDelayed(this, 100);
+                }
             }
         };
-        SnakeActivity.customHandler.postDelayed(run, 1000);
+        SnakeActivity.customHandler.postDelayed(runner  , 2000);
     }
 
-    public void step() {
-        this.snake.step();
+    public boolean step() {
+        boolean valid = this.snake.step();
         SnakeView sv = (SnakeView)findViewById(R.id.view);
-        sv.setSnake(this.getSnake());
         sv.invalidate();
+        return valid;
     }
 
     public void initializeSnake() {
