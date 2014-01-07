@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -35,14 +37,16 @@ public class SnakeActivity extends Activity {
         new Runnable() {
             public void run() {
                 step();
-                resetSnake();
-                SnakeActivity.customHandler.postDelayed(this, 500);
+                SnakeActivity.customHandler.postDelayed(this, 100);
             }
         }.run();
     }
 
-    public boolean step() {
-        return this.snake.step();
+    public void step() {
+        SnakeView sv = (SnakeView)findViewById(R.id.view);
+        sv.setSnake(this.getSnake());
+        this.snake.step();
+        sv.invalidate();
     }
 
     public void initializeSnake() {
@@ -50,12 +54,6 @@ public class SnakeActivity extends Activity {
         setContentView(R.layout.snake_activity);
         SnakeView sv = (SnakeView)findViewById(R.id.view);
         sv.setSnake(this.getSnake());
-    }
-
-    public void resetSnake() {
-        SnakeView sv = (SnakeView)findViewById(R.id.view);
-        sv.setSnake(this.getSnake());
-        sv.invalidate();
     }
 
     public Snake getSnake() {
@@ -70,5 +68,24 @@ public class SnakeActivity extends Activity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean setLeadDirection(int direction) {
+        return this.snake.setLeadDirection(direction);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == 0) {
+            switch ((int)(event.getKeyCode())) {
+                case 32: return setLeadDirection(0);
+                case 47: return setLeadDirection(1);
+                case 29: return setLeadDirection(2);
+                case 51: return setLeadDirection(3);
+                default: return super.dispatchKeyEvent(event);
+            }
+        } else {
+            return super.dispatchKeyEvent(event);
+        }
     }
 }

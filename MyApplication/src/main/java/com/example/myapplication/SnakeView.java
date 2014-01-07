@@ -28,7 +28,7 @@ public class SnakeView extends View {
         this.backgroundPaint = new Paint();
         this.backgroundPaint.setColor(Color.rgb(220,220, 220));
         this.snakeBodyColor = new Paint();
-        this.snakeBodyColor.setColor(Color.rgb(220,220, 255));
+        this.snakeBodyColor.setColor(Color.rgb(100,110, 255));
     }
 
     public void measureScreen() {
@@ -46,7 +46,12 @@ public class SnakeView extends View {
     public void onDraw(Canvas c) {
         measureScreen();
         c.drawRect(this.left, this.top, this.right, this.bottom, this.backgroundPaint);
+        drawFood(c);
         drawSnake(c);
+    }
+
+    public void drawFood(Canvas c) {
+        this.drawSquare(c, this.snake.foodPosition.first, this.snake.foodPosition.second);
     }
 
     public void drawSnake(Canvas c) {
@@ -59,8 +64,8 @@ public class SnakeView extends View {
         c.drawRect(
                 this.canvasPadding + x*this.SQUARE_WIDTH,
                 this.canvasPadding + y*this.SQUARE_WIDTH,
-                this.canvasPadding*2 + x*this.SQUARE_WIDTH,
-                this.canvasPadding*2 + y*this.SQUARE_WIDTH,
+                this.canvasPadding + (x+1)*this.SQUARE_WIDTH,
+                this.canvasPadding + (y+1)*this.SQUARE_WIDTH,
                 this.snakeBodyColor
         );
     }
