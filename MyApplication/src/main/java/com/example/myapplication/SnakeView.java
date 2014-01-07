@@ -36,7 +36,7 @@ public class SnakeView extends View {
         this.top = this.canvasPadding;
         this.left = this.canvasPadding;
         this.right = metrics.widthPixels - this.canvasPadding;
-        this.bottom = this.getBottom() - this.canvasPadding;
+        this.bottom = this.top + (this.right - this.left);
         this.SQUARE_WIDTH = (int) ((right - left) / this.snake.GRID_SIZE);
     }
 
